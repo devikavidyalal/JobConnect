@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post a Job</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 min-h-screen">
+    {% include 'navbar.html' %}
+    <div class="container mx-auto p-8">
+        <h1 class="text-5xl font-bold mb-12 text-center text-gray-800">Post a Job</h1>
+        <!-- Display Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="mb-4">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+            <form method="POST" action="{{ url_for('post_job') }}" class="space-y-6">
+                <!-- Job Title -->
+                <div class="flex flex-col">
+                    <label for="title" class="text-lg font-semibold text-gray-700">Job Title</label>
+                    <input type="text" name="title" id="title" class="mt-2 p-3 border border-gray-300 rounded-lg" required placeholder="e.g., Software Engineer">
+                </div>
+
+                <!-- Job Description -->
+                <div class="flex flex-col">
+                    <label for="description" class="text-lg font-semibold text-gray-700">Job Description</label>
+                    <textarea name="description" id="description" rows="4" class="mt-2 p-3 border border-gray-300 rounded-lg" required placeholder="Describe the job responsibilities and expectations"></textarea>
+                </div>
+
+                <!-- Skills -->
+                <div class="flex flex-col">
+                    <label for="skills" class="text-lg font-semibold text-gray-700">SKills Required</label>
+                    <input type="text" name="skills" id="skills" class="mt-2 p-3 border border-gray-300 rounded-lg" required placeholder="e.g., Python, Java">
+                </div>
+
+
+                <!-- Job Type Dropdown -->
+                <div class="flex flex-col">
+                    <label for="job_type" class="text-lg font-semibold text-gray-700">Job Type</label>
+                    <select name="job_type" id="job_type" class="mt-2 p-3 border border-gray-300 rounded-lg" required>
+                        <option value="" disabled selected>Select Job Type</option>
+                        <option value="full-time">Full-time</option>
+                        <option value="part-time">Part-time</option>
+                        <option value="remote">Remote</option>
+                    </select>
+                </div>
+
+
+
+
+                <!-- Company -->
+                <div class="flex flex-col">
+                    <label for="company" class="text-lg font-semibold text-gray-700">Company</label>
+                    <input type="text" name="company" id="company" class="mt-2 p-3 border border-gray-300 rounded-lg" required placeholder="e.g., Tech Corp">
+                </div>
+
+                <!-- Location -->
+                <div class="flex flex-col">
+                    <label for="location" class="text-lg font-semibold text-gray-700">Location</label>
+                    <input type="text" name="location" id="location" class="mt-2 p-3 border border-gray-300 rounded-lg" required placeholder="City, State">
+                </div>
+
+                <!-- Phone Number -->
+                <div class="flex flex-col">
+                    <label for="phone_number" class="text-lg font-semibold text-gray-700">Phone Number</label>
+                    <input type="text" name="phone_number" id="phone_number" class="mt-2 p-3 border border-gray-300 rounded-lg" required placeholder="e.g., 1234567890">
+                </div>
+
+                <!-- Mail ID -->
+                <div class="flex flex-col">
+                    <label for="mail_id" class="text-lg font-semibold text-gray-700">Mail ID</label>
+                    <input type="email" name="mail_id" id="mail_id" class="mt-2 p-3 border border-gray-300 rounded-lg" required placeholder="e.g., hr@company.com">
+                </div>
+
+                <!-- Salary -->
+                <div class="flex flex-col">
+                    <label for="salary" class="text-lg font-semibold text-gray-700">Salary</label>
+                    <input type="text" name="salary" id="salary" class="mt-2 p-3 border border-gray-300 rounded-lg" required placeholder="e.g., 60,000 - 80,000">
+                </div>
+
+                <!-- Application Deadline -->
+                <div class="flex flex-col">
+                    <label for="application_deadline" class="text-lg font-semibold text-gray-700">Application Deadline</label>
+                    <input type="date" name="application_deadline" id="application_deadline" class="mt-2 p-3 border border-gray-300 rounded-lg" required>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-center">
+                    <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded-full shadow-md hover:bg-blue-600 transition-colors duration-200 focus:ring-4 focus:ring-blue-300">
+                        Post Job
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Link to post_job.js -->
+    <script src="{{ url_for('static', filename='js/post_job.js') }}" defer></script>
+</body>
+</html>

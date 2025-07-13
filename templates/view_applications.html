@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Your Applications</title>
+</head>
+<body class="bg-gradient-to-r from-green-50 to-green-100 min-h-screen">
+    <div class="container mx-auto p-8">
+        <!-- Back to Dashboard Button -->
+        <div class="mb-4 flex justify-start">
+            <a href="/seeker_dashboard" 
+               class="bg-gray-200 text-gray-800 p-3 rounded-xl hover:bg-gray-300 transition flex items-center">
+                &larr; Back to Dashboard
+            </a>
+        </div>
+        <h1 class="text-4xl font-bold mb-8 text-center text-gray-800">Your Applications</h1>
+        
+        <div class="bg-white p-8 rounded-xl shadow-lg">
+            {% if applications and applications|length > 0 %}
+            <table class="min-w-full bg-white border border-gray-200">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="py-2 px-4 border-b text-left">Job Title</th>
+                        <th class="py-2 px-4 border-b text-left">Application Date</th>
+                        <th class="py-2 px-4 border-b text-left">Status</th>
+                        <th class="py-2 px-4 border-b text-left">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for application in applications %}
+                    <tr>
+                        <td class="py-2 px-4 border-b">{{ job_details.get(application['job_id'] | string, 'Job Not Found') }}</td>
+
+                        <td class="py-2 px-4 border-b">{{ application['application_date'].strftime('%Y-%m-%d') }}</td>
+                        <td class="py-2 px-4 border-b">
+                            <span class="px-2 py-1 rounded-full 
+                                {% if application['status'] == 'Applied' %} bg-blue-200 {% elif application['status'] == 'Interviewed' %} bg-yellow-200 {% elif application['status'] == 'Rejected' %} bg-red-200 {% else %} bg-gray-200 {% endif %}">
+                                {{ application['status'] }}
+                            </span>
+                        </td>
+                        <td class="py-2 px-4 border-b">
+                            <a href="{{ url_for('view_application_details', application_id=application['_id']) }}" 
+                               class="bg-blue-500 text-white px-4 py-1 rounded-md">View Details</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="text-center text-gray-500 mt-4">You have not applied for any jobs yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

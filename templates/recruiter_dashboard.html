@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Recruiter Dashboard</title>
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 min-h-screen">
+    {% include 'navbar.html' %}
+    <div class="container mx-auto p-8">
+        <h1 class="text-5xl font-bold mb-12 text-center text-gray-800">Recruiter Dashboard</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center">
+                <h2 class="text-3xl font-semibold mb-4 text-gray-700">Post a Job</h2>
+                <p class="text-gray-500 mb-6 text-center">Create new job listings to attract top talent.</p>
+                <a href="{{ url_for('post_job') }}" class="bg-blue-500 text-white px-6 py-3 rounded-full shadow-md hover:bg-blue-600 transition-colors duration-200 focus:ring-4 focus:ring-blue-300">Post a Job</a>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center">
+                <h2 class="text-3xl font-semibold mb-4 text-gray-700">Manage Applications</h2>
+                <p class="text-gray-500 mb-6 text-center">Review and respond to job applications.</p>
+                <a href="{{ url_for('manage_applications') }}">
+    <button class="bg-green-500 text-white px-6 py-3 rounded-full">Manage Applications</button>
+</a>
+                <!-- Display posted jobs only when the button is clicked -->
+                <div id="postedJobs" class="mt-8 hidden">
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">Your Posted Jobs</h3>
+                    {% for job in posted_jobs %}
+                        <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+                            <h4 class="text-xl font-semibold text-gray-800">{{ job.title }}</h4>
+                            <p class="text-gray-600">{{ job.description }}</p>
+                            <p class="text-gray-600"><strong>Deadline:</strong> {{ job.application_deadline }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handle the display of the posted jobs section when the "Manage Applications" button is clicked
+        document.getElementById("manageApplicationsButton").onclick = function() {
+            const postedJobsSection = document.getElementById("postedJobs");
+            postedJobsSection.classList.toggle("hidden"); // Toggle visibility of posted jobs
+        };
+    </script>
+</body>
+</html>

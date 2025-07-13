@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Job Seeker Dashboard</title>
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 min-h-screen">
+    {% include 'navbar.html' %}
+    <div class="container mx-auto p-8">
+        <h1 class="text-5xl font-bold mb-12 text-center text-gray-800">Job Seeker Dashboard</h1>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center">
+
+                <h2 class="text-3xl font-semibold mb-4 text-gray-700">Search Jobs</h2>
+                <p class="text-gray-500 mb-6 text-center">Find your dream job using our advanced filters.</p>
+                <a href="{{ url_for('search_jobs') }}">
+        <button class="bg-blue-500 text-white px-6 py-3 rounded-full shadow-md hover:bg-blue-600 transition-colors duration-200 focus:ring-4 focus:ring-blue-300">
+            Search Jobs
+        </button>
+    </a>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center">
+                <h2 class="text-3xl font-semibold mb-4 text-gray-700">My Applications</h2>
+                <p class="text-gray-500 mb-6 text-center">Track your application status and history.</p>
+                <a href="{{ url_for('view_applications') }}">
+    <button class="bg-green-500 text-white px-6 py-3 rounded-full">View Applications</button>
+</a>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center">
+                <h2 class="text-3xl font-semibold mb-4 text-gray-700">Saved Jobs</h2>
+                <p class="text-gray-500 mb-6 text-center">View jobs you've saved for later.</p>
+                <a href="{{ url_for('saved_jobs') }}">
+    <button class="bg-purple-500 text-white px-6 py-3 rounded-full shadow-md hover:bg-purple-600 transition-colors duration-200 focus:ring-4 focus:ring-purple-300">
+        View Saved Jobs
+    </button>
+</a>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

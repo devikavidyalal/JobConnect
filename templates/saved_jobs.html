@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Jobs</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 min-h-screen">
+    {% include 'navbar.html' %}
+    <div class="container mx-auto p-8">
+        <!-- Back to Dashboard Button -->
+        <div class="mb-4 flex justify-start">
+            <a href="/seeker_dashboard" 
+               class="bg-gray-200 text-gray-800 p-3 rounded-xl hover:bg-gray-300 transition flex items-center">
+                &larr; Back to Dashboard
+            </a>
+        </div>
+        <h1 class="text-5xl font-bold mb-12 text-center text-gray-800">Your Saved Jobs</h1>
+        <!-- Search Form -->
+        <form method="GET" action="/saved_jobs" class="mb-8 flex justify-center">
+            <input 
+                type="text" 
+                name="query" 
+                placeholder="Search your saved jobs..." 
+                class="w-2/3 p-3 rounded-l-xl border border-gray-300 focus:outline-none"
+                value="{{ request.args.get('query', '') }}"
+            >
+            <button 
+                type="submit" 
+                class="bg-blue-500 text-white p-3 rounded-r-xl hover:bg-blue-600 transition"
+            >
+                Search
+            </button>
+        </form>
+
+        <!-- Filter Form -->
+        <form method="GET" action="/saved_jobs" class="mb-8 flex flex-wrap justify-center gap-4">
+            <!-- Salary Range Filter -->
+            <select name="salary_range" class="p-3 border border-gray-300 rounded-xl">
+                <option value="">Salary Range</option>
+                <option value="0-50000" {% if request.args.get('salary_range') == '0-50000' %}selected{% endif %}>0 - 50,000</option>
+                <option value="50000-100000" {% if request.args.get('salary_range') == '50000-100000' %}selected{% endif %}>50,000 - 100,000</option>
+                <option value="100000-200000" {% if request.args.get('salary_range') == '100000-200000' %}selected{% endif %}>100,000 - 200,000</option>
+                <option value="200000+" {% if request.args.get('salary_range') == '200000+' %}selected{% endif %}>> 200,000</option>
+            </select>
+
+            <!-- Job Type Filter -->
+            <select name="job_type" class="p-3 border border-gray-300 rounded-xl">
+                <option value="">Job Type</option>
+                <option value="full-time" {% if request.args.get('job_type') == 'full-time' %}selected{% endif %}>Full-Time</option>
+                <option value="part-time" {% if request.args.get('job_type') == 'part-time' %}selected{% endif %}>Part-Time</option>
+                <option value="remote" {% if request.args.get('job_type') == 'remote' %}selected{% endif %}>Remote</option>
+            </select>
+
+            <button 
+                type="submit" 
+                class="bg-green-500 text-white p-3 rounded-xl hover:bg-green-600 transition"
+            >
+                Apply Filters
+            </button>
+        </form>
+
+        {% if saved_jobs|length == 0 %}
+        <div class="bg-white p-8 rounded-2xl shadow-lg text-center">
+            <p class="text-gray-500 text-lg">You haven't saved any jobs yet. Start browsing and save your favorites!</p>
+            <a href="{{ url_for('search_jobs') }}">
+                <button class="mt-4 bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition-colors duration-200 focus:ring-4 focus:ring-blue-300">Browse Jobs</button>
+            </a>
+        </div>
+        {% else %}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {% for job in saved_jobs %}
+            <div class="bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col justify-between items-center aspect-w-1 aspect-h-1">
+                <h2 class="text-2xl font-semibold text-gray-700 text-center">{{ job.title }}</h2>
+                <p class="text-gray-500 text-center">{{ job.company_name }}</p>
+                <p class="text-gray-600 text-center mb-4">{{ job.location }}</p>
+                <a href="{{ url_for('job_details', job_id=job['_id']) }}">
+                    <button class="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition-colors duration-200 focus:ring-4 focus:ring-blue-300">View Job</button>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

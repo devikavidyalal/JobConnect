@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-r from-green-50 to-green-100 min-h-screen">
+    <div class="container mx-auto p-8">
+        <!-- Back to Dashboard Button -->
+        <div class="mb-4 flex justify-start">
+            <a href="/seeker_dashboard" 
+               class="bg-gray-200 text-gray-800 p-3 rounded-xl hover:bg-gray-300 transition flex items-center">
+                &larr; Back to Dashboard
+            </a>
+        </div>
+        <h1 class="text-4xl font-bold mb-8 text-center text-gray-800">Application Details</h1>
+
+        <div class="bg-white p-8 rounded-xl shadow-lg">
+            <h2 class="text-2xl font-semibold mb-4">Job Details</h2>
+            <div class="space-y-4">
+                <p><strong>Job Title:</strong> {{ job['title'] }}</p>
+                <p><strong>Company:</strong> {{ job.get('company', 'N/A') }}</p>
+                <p><strong>Location:</strong> {{ job.get('location', 'N/A') }}</p>
+                <p><strong>Job Description:</strong> {{ job.get('description', 'No description available.') }}</p>
+            </div>
+
+            <h2 class="text-2xl font-semibold mt-8 mb-4">Application Details</h2>
+            <div class="space-y-4">
+                <p><strong>Application Date:</strong> {{ application['application_date'].strftime('%Y-%m-%d') }}</p>
+                <p><strong>Status:</strong> 
+                    <span class="px-2 py-1 rounded-full 
+                        {% if application['status'] == 'Applied' %} bg-blue-200 {% elif application['status'] == 'Interviewed' %} bg-yellow-200 {% elif application['status'] == 'Rejected' %} bg-red-200 {% else %} bg-gray-200 {% endif %}">
+                        {{ application['status'] }}
+                    </span>
+                </p>
+            </div>
+
+            
+        </div>
+    </div>
+</body>
+</html>

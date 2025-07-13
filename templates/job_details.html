@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Job Details</title>
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 min-h-screen relative overflow-y-auto">
+    {% include 'navbar.html' %}
+
+    <div class="container mx-auto p-8">
+        <!-- Back to Dashboard Button -->
+        <div class="mb-4 flex justify-start">
+            <a href="/seeker_dashboard" 
+               class="bg-gray-200 text-gray-800 p-3 rounded-xl hover:bg-gray-300 transition flex items-center">
+                &larr; Back to Dashboard
+            </a>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-lg max-w-3xl mx-auto">
+            <h1 class="text-4xl font-bold mb-4 text-gray-800">{{ job['title'] }}</h1>
+            
+            <p class="text-gray-600 mb-2"><strong>Description:</strong> {{ job['description'] }}</p>
+            
+            <p class="text-gray-600 mb-2"><strong>Company:</strong> {{ job['company'] }}</p>
+            
+            <p class="text-gray-600 mb-2"><strong>Mail ID:</strong> 
+                <a href="mailto:{{ job['mail_id'] }}" class="text-blue-500 hover:underline">
+                    {{ job['mail_id'] }}
+                </a>
+            </p>
+            
+            <p class="text-gray-600 mb-2"><strong>Phone Number:</strong> 
+                <a href="tel:{{ job['phone_number'] }}" class="text-blue-500 hover:underline">
+                    {{ job['phone_number'] }}
+                </a>
+            </p>
+            
+            <p class="text-gray-600 mb-2"><strong>Job Type:</strong> {{ job['job_type'] }}</p>
+            
+            <p class="text-gray-600 mb-2"><strong>Salary:</strong> {{ job['salary'] }}</p>
+            
+            <p class="text-gray-600 mb-2"><strong>Location:</strong> {{ job['location'] }}</p>
+
+            <p class="text-gray-600 mb-2"><strong>Skills Required:</strong> {{job['skills']}}</p>
+
+            <p class="text-gray-600 mb-2"><strong>Application Deadline:</strong> {{job['application_deadline']}}</p>
+            
+            <div class="flex space-x-4 mt-6">
+                <button onclick="toggleModal()" 
+                        class="bg-blue-500 text-white px-6 py-3 rounded-full shadow-md hover:bg-blue-600 transition-colors duration-200">
+                    Apply Now
+                </button>
+                <a href="/save_job/{{ job['_id'] }}" 
+   class="bg-green-500 text-white px-6 py-3 rounded-full shadow-md hover:bg-green-600 transition-colors duration-200">
+    {% if job.is_saved %}
+        Saved
+    {% else %}
+        Save for Later
+    {% endif %}
+</a>
+
+
+    <!-- Modal Form -->
+    <div id="applyModal" 
+         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-auto hidden">
+        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="toggleModal()" 
+                    class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">
+                ✖
+            </button>
+            <h2 class="text-3xl font-semibold mb-6 text-gray-800 text-center">
+                Apply for {{ job['title'] }}
+            </h2>
+            
+            <!-- Form to Apply for Job -->
+            <form method="POST" action="{{ url_for('apply_for_job', job_id=job['_id']) }}" enctype="multipart/form-data" class="space-y-6">
+                <input type="hidden" name="job_id" value="{{ job['_id'] }}">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-gray-700 mb-1">Name:</label>
+                        <input type="text" name="name" required 
+                               class="w-full p-3 border rounded-lg focus:outline-none focus:border-blue-500 transition">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 mb-1">Age:</label>
+                        <input type="number" name="age" required 
+                               class="w-full p-3 border rounded-lg focus:outline-none focus:border-blue-500 transition">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 mb-1">Skills:</label>
+                    <input type="text" name="skills" placeholder="e.g. Python, Flask, ML" required 
+                           class="w-full p-3 border rounded-lg focus:outline-none focus:border-blue-500 transition">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 mb-1">Experience (in years):</label>
+                    <input type="number" name="experience" required 
+                           class="w-full p-3 border rounded-lg focus:outline-none focus:border-blue-500 transition">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 mb-1">Phone Number:</label>
+                    <input type="number" name="phone_number" required 
+                           class="w-full p-3 border rounded-lg focus:outline-none focus:border-blue-500 transition">
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 mb-1">Mail id:</label>
+                    <input type="email" name="mail_id" required 
+                           class="w-full p-3 border rounded-lg focus:outline-none focus:border-blue-500 transition">
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 mb-1">Resume Upload:</label>
+                    <input type="file" name="resume" accept=".pdf,.doc,.docx" required 
+                           class="w-full p-3 border rounded-lg focus:outline-none focus:border-blue-500 transition">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700 mb-1">Additional Details:</label>
+                    <textarea name="details" placeholder="Tell us more about you" rows="4"
+                              class="w-full p-3 border rounded-lg focus:outline-none focus:border-blue-500 transition"></textarea>
+                </div>
+                
+                <div class="flex justify-end space-x-4">
+                    <button type="button" onclick="toggleModal()" 
+                            class="bg-gray-500 text-white px-5 py-3 rounded-lg shadow-md hover:bg-gray-600 transition">
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                            class="bg-blue-500 text-white px-5 py-3 rounded-lg shadow-md hover:bg-blue-600 transition">
+                        Submit Application
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul>
+      {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <!-- External Script -->
+    <script>
+        function toggleModal() {
+            var modal = document.getElementById('applyModal');
+            modal.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>

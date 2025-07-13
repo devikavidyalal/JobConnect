@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register - JobConnect</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="{{ url_for('static', filename='js/register.js') }}" defer></script>
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 min-h-screen flex flex-col">
+  <!-- Navigation Bar -->
+  <header>
+    <nav class="bg-white shadow">
+      <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center">
+          <a href="{{ url_for('home') }}" class="flex items-center">
+            <span class="text-2xl font-bold text-gray-800 mr-2">Job</span>
+            <span class="text-2xl font-bold text-blue-500">Connect</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Registration Form -->
+  <main class="flex-grow container mx-auto px-6 py-16 flex flex-col items-center">
+    <div class="w-full max-w-lg bg-white p-8 rounded-lg shadow-lg">
+      <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Register</h2>
+      <form method="POST" action="/register" class="space-y-5">
+        <div>
+          <label for="username" class="block text-gray-700 mb-2">Username:</label>
+          <input type="text" id="username" name="username" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+        </div>
+        <div>
+          <label for="email" class="block text-gray-700 mb-2">Email:</label>
+          <input type="email" id="email" name="email" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+        </div>
+        <div>
+          <label for="phonenumber" class="block text-gray-700 mb-2">Phone Number:</label>
+          <input type="tel" id="phonenumber" name="phonenumber" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+        </div>
+        <div>
+          <label for="password" class="block text-gray-700 mb-2">Password:</label>
+          <input type="password" id="password" name="password" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+        </div>
+        <div>
+          <label for="usertype" class="block text-gray-700 mb-2">User Type:</label>
+          <select id="usertype" name="usertype" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+            <option value="jobseeker">Job Seeker</option>
+            <option value="recruiter">Recruiter</option>
+          </select>
+        </div>
+        <!-- Additional fields for recruiters -->
+        <div id="recruiterFields" class="space-y-4" style="display:none;">
+          <div>
+            <label for="companyName" class="block text-gray-700 mb-2">Company Name:</label>
+            <input type="text" id="companyName" name="company_name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+          </div>
+          <div>
+            <label for="companyDetails" class="block text-gray-700 mb-2">Company Details:</label>
+            <textarea id="companyDetails" name="company_details" rows="3" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"></textarea>
+          </div>
+        </div>
+        <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition-colors duration-200">Register</button>
+      </form>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <ul class="mt-4 space-y-2">
+        {% for category, message in messages %}
+        <li class="text-center p-2 rounded bg-{{ 'green' if category == 'success' else 'red' }}-500 text-white">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% endwith %}
+
+      <p class="mt-6 text-center text-gray-600">Already have an account? <a href="/login" class="text-blue-500 hover:underline">Login here</a>.</p>
+    </div>
+  </main>
+</body>
+</html>

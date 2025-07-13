@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Manage Application Status</title>
+</head>
+<body class="bg-gradient-to-r from-green-50 to-green-100 min-h-screen">
+    {% include 'navbar.html' %}
+    <div class="container mx-auto p-8">
+        <!-- Back to Dashboard Button -->
+        <div class="mb-4 flex justify-start">
+            <a href="/recruiter_dashboard" 
+               class="bg-gray-200 text-gray-800 p-3 rounded-xl hover:bg-gray-300 transition flex items-center">
+                &larr; Back to Dashboard
+            </a>
+        </div>
+        <h1 class="text-5xl font-bold mb-8 text-center text-gray-800">
+            Applications for {{ job_title }}
+        </h1>
+        
+        {% if applications %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {% for app in applications %}
+                    <div class="bg-white p-6 rounded-2xl shadow-lg">
+                        <h2 class="text-2xl font-semibold mb-4 text-gray-700">{{ app['name'] }}</h2>
+                        <p><strong>Age:</strong> {{ app['age'] }}</p>
+                        <p><strong>Skills:</strong> {{ app['skills'] }}</p>
+                        <p><strong>Experience:</strong> {{ app['experience'] }} years</p>
+                        <p><strong>Additional Details:</strong> {{ app['details'] }}</p>
+                        <p><strong>Status:</strong> {{ app['status'] }}</p>
+                        
+                        {% if app['resume_path'] %}
+    <p><strong>Resume:</strong> 
+        <a href="{{ url_for('static', filename='resumes/' + app['resume_path']) }}" 
+           class="text-blue-500 underline" target="_blank">
+            View Resume
+        </a>
+    </p>
+{% else %}
+    <p><strong>Resume:</strong> Not available</p>
+{% endif %}
+
+                        
+                        <!-- Use buttons instead of dropdown -->
+                        <form method="POST" action="/update_application_status" class="mt-4">
+                            <input type="hidden" name="application_id" value="{{ app['_id'] }}">
+
+                            <!-- Show Shortlist button only if the status is not shortlisted or selected -->
+                            {% if app['status'] != 'shortlisted' and app['status'] != 'selected' %}
+                                <button type="submit" name="status" value="shortlisted" 
+                                        class="bg-green-500 text-white px-6 py-3 rounded-full w-full mb-4">
+                                    Shortlist
+                                </button>
+                                <button type="submit" name="status" value="rejected" 
+                                        class="bg-red-500 text-white px-6 py-3 rounded-full w-full">
+                                    Reject
+                                </button>
+                            {% endif %}
+                            
+                            <!-- Show Select and Reject buttons only if the status is shortlisted -->
+                            {% if app['status'] == 'shortlisted' %}
+                                <button type="submit" name="status" value="selected" 
+                                        class="bg-blue-500 text-white px-6 py-3 rounded-full w-full mb-4">
+                                    Select
+                                </button>
+                                <button type="submit" name="status" value="rejected" 
+                                        class="bg-red-500 text-white px-6 py-3 rounded-full w-full">
+                                    Reject
+                                </button>
+                            {% endif %}
+                            
+                            <!-- Show no other buttons if the status is selected or rejected -->
+                            {% if app['status'] == 'selected' %}
+                                <p class="text-green-500 text-center">Selected</p>
+                            {% endif %}
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-2xl text-gray-600 text-center mt-20">No applications submitted yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- Add in base template to show flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mx-auto p-4">
+                {% for category, message in messages %}
+                    <div class="bg-green-100 text-green-800 p-4 rounded-md mb-4">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>

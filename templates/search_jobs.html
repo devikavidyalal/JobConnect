@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Search Jobs</title>
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 min-h-screen">
+    {% include 'navbar.html' %}
+    
+    <div class="container mx-auto p-8">
+        <!-- Back to Dashboard Button -->
+        <div class="mb-4 flex justify-start">
+            <a href="/seeker_dashboard" 
+               class="bg-gray-200 text-gray-800 p-3 rounded-xl hover:bg-gray-300 transition flex items-center">
+                &larr; Back to Dashboard
+            </a>
+        </div>
+        <h1 class="text-4xl font-bold mb-8 text-center text-gray-800">Search Jobs</h1>
+        <!-- Search Form -->
+        <form method="GET" action="/search_jobs" class="mb-8 flex justify-center">
+            <input 
+                type="text" 
+                name="query" 
+                placeholder="Search for jobs..." 
+                class="w-2/3 p-3 rounded-l-xl border border-gray-300 focus:outline-none"
+                value="{{ request.args.get('query', '') }}"
+            >
+            <button 
+                type="submit" 
+                class="bg-blue-500 text-white p-3 rounded-r-xl hover:bg-blue-600 transition"
+            >
+                Search
+            </button>
+        </form>
+
+
+
+        <!-- Filter Form -->
+        <form method="GET" action="/search_jobs" class="mb-8 flex flex-wrap justify-center gap-4">
+            <!-- Salary Range Filter -->
+            <select name="salary_range" class="p-3 border border-gray-300 rounded-xl">
+                <option value="">Salary Range</option>
+                <option value="0-50000" {% if request.args.get('salary_range') == '0-50000' %}selected{% endif %}>0 - 50,000</option>
+                <option value="50000-100000" {% if request.args.get('salary_range') == '50000-100000' %}selected{% endif %}>50,000 - 100,000</option>
+                <option value="100000-200000" {% if request.args.get('salary_range') == '100000-200000' %}selected{% endif %}>100,000 - 200,000</option>
+                <option value="200000+" {% if request.args.get('salary_range') == '200000+' %}selected{% endif %}>> 200,000</option>
+            </select>
+
+            <!-- Job Type Filter -->
+            <select name="job_type" class="p-3 border border-gray-300 rounded-xl">
+                <option value="">Job Type</option>
+                <option value="full-time" {% if request.args.get('job_type') == 'full-time' %}selected{% endif %}>Full-Time</option>
+                <option value="part-time" {% if request.args.get('job_type') == 'part-time' %}selected{% endif %}>Part-Time</option>
+                <option value="remote" {% if request.args.get('job_type') == 'remote' %}selected{% endif %}>Remote</option>
+            </select>
+
+            <button 
+                type="submit" 
+                class="bg-green-500 text-white p-3 rounded-xl hover:bg-green-600 transition"
+            >
+                Apply Filters
+            </button>
+        </form>
+
+
+
+        {% if jobs %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for job in jobs %}
+                    <a href="/job_details/{{ job['_id'] }}" class="block">
+                        <div class="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
+                            <h2 class="text-2xl font-semibold mb-2 text-gray-800">{{ job['title'] }}</h2>
+                            <p class="text-gray-600 mb-2"><strong>Company:</strong> {{ job['company'] }}</p>
+                            <p class="text-gray-500 mb-4">{{ job['description'] | truncate(100) }}</p>
+                            <p class="text-gray-600 mb-2"><strong>Location:</strong> {{ job['location'] }}</p>
+                            <p class="text-gray-600 mb-4"><strong>Salary:</strong> {{ job['salary'] }}</p>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center text-gray-500 text-lg">No approved jobs available at the moment.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
